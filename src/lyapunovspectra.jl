@@ -1,8 +1,6 @@
-#include("./ThermostatModel.jl")
 include("./RungeKutta.jl")
-include("./DDHOinitial.jl")
+include("./randominitialcondition.jl")
 
-#using ThermostatModel
 using ForwardDiff
 import ForwardDiff.derivative
 
