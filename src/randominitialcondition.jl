@@ -1,18 +1,9 @@
-##Recall that rho(p,q,S) = exp(-¦Â*H)*f(S)
+##Recall that rho(p,q,S) = exp(-beta*H)*f(S)
 
 function logisticsampling(Q::Float64)
     u = rand()
     s = -log(1./u - 1.) + Q 
 end
-
-function momentum(beta::Float64)
-    p = randn()
-    p = p/sqrt(beta) #Recall that standard deviation is 1/sqrt(beta)
-end    
-    
-
-
-
 
 function boxmuller(beta::Float64) ##For the harmonic oscillator
     sigma = 1./sqrt(beta)

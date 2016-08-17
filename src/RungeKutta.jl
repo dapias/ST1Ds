@@ -1,4 +1,4 @@
-function rungeK(x_init,campo,h)
+function rungeK(x_init::Vector{Float64},campo::Function,h::Float64)
   state = x_init
   k1 = campo(state)
   k2 = campo(state + .5*h*k1)
