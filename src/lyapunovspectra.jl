@@ -139,7 +139,7 @@ function lyapunovspectra(field::Function, r::Vector{Float64}, dt::Float64, dtsam
     exp2 = sum(log(norm2))/(nsteps*dtsampling)
     exp3 = sum(log(norm3))/(nsteps*dtsampling)
 
-    println("Exponentes de Lyapunov: $exp1, $exp2, $exp3")
+#    println("Exponentes de Lyapunov: $exp1, $exp2, $exp3")
 
     return norm1, norm2, norm3, exp1, exp2, exp3
 
