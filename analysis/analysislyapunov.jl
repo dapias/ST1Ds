@@ -1,39 +1,40 @@
 using HDF5
 
-exps = 3
-sims = 6
+function makelyaparrays(exps::Int64)
 
-##Initialize arrays C_vGaussian, C_vLogistic ...
-for i in 1:exps
-    m = symbol("lyap$i")
-    @eval ($m = zeros(sims))
-end
+    ##Number of simulation files
+    cd("$(homedir())/HooverPrize/data/HO")
+    dir = filter(x -> endswith(x,".hdf5"), readdir())
+    sims = length(dir)
 
-
-
-
-##Extract data of each file
-cd("$(homedir())/HooverPrize/data/HO")
-j = 1
-for i in filter(x -> endswith(x,".hdf5"), readdir()) #Filter the files that start with string temp
-    filename = "$i"
-    file = h5open("$filename", "r");
-    sim = read(file);
-    for k in 1:exps
-        p = Symbol("lyap$k")
-        @eval ($p[j]) = @eval ($(sim["exp$k"]))
+    ##Initialize arrays lyap1, ...
+    for i in 1:exps
+        m = Symbol("lyap$i")
+        @eval $m = @eval $(zeros(sims))
     end
-    j += 1
+
+    ##Extract data of each file
+    j = 1
+    for i in dir
+        filename = "$i"
+        file = h5open("$filename", "r");
+        sim = read(file);
+        for k in 1:exps
+            p = Symbol("lyap$k")
+            lyap = @eval $p
+            lyap[j]  = @eval ($(sim["exp$k"]))
+        end
+        j += 1
+    end
+    return lyap1, lyap2, lyap3, sims
 end
 
-
+exponents = 3
+lyap1, lyap2, lyap3, sims  = makelyaparrays(exponents)
+lyapexps = [lyap1, lyap2, lyap3]
 
 cd("$(homedir())/HooverPrize/analysis/")
-writedlm("lyap1.txt", lyap1)
 
-file = open("lyap1.txt","a")
+writedlm("lyapexps.txt", lyapexps)
 
-writedlm(file, lyap2)
-writedlm(file, lyap3)
-
-close(file)
+##Open it via readdlm("lyapexps.txt")
