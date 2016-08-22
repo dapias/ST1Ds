@@ -5,9 +5,11 @@ using HDF5
 function makelyaparrays(exps::Int64, potential::AbstractString)
 
     ##Number of simulation files
-    cd("$(homedir())/HooverPrize/data/$potential")
+    cd("$(homedir())/lyapunov/data/$potential")
     dir = filter(x -> endswith(x,".hdf5"), readdir())
     sims = length(dir)
+
+    initial = Matrix{Float64}(sims,3)
 
     ##Initialize arrays lyap1, ...
     for i in 1:exps
@@ -26,9 +28,11 @@ function makelyaparrays(exps::Int64, potential::AbstractString)
             lyap = @eval $p
             lyap[j]  = @eval ($(sim["exp$k"]))
         end
+        initial[j,:] = sim["initialcond"]
         j += 1
+        close(file)
     end
-    return lyap1, lyap2, lyap3, sims
+    return initial, lyap1, lyap2, lyap3, sims
 end
 
 println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (Quartic)) ")
@@ -45,10 +49,10 @@ end
 
 
 exponents = 3
-lyap1, lyap2, lyap3, sims  = makelyaparrays(exponents, potential)
-lyapexps = [lyap1, lyap2, lyap3]
+initial, lyap1, lyap2, lyap3, sims  = makelyaparrays(exponents, potential)
+lyapexps = [[lyap1] [lyap2] [lyap3] [initial]]
 
-cd("$(homedir())/HooverPrize/analysis/")
+cd("$(homedir())/lyapunov/analysis/")
 
 writedlm("lyapexps$potential.txt", lyapexps)
 
