@@ -1,4 +1,4 @@
-include("poincare.jl")
+include("../src/poincare.jl")
 
 using PyPlot
 
@@ -9,11 +9,12 @@ end
 println("Type the name of the file (without a format)")
 input = string(readline(STDIN))
 filename = input[1:end-1]
+potentialname = input[end-2:end-1]
 
-file = h5open("$(filename).hdf5","r")
+file = h5open("../poincaredata/$potentialname/$(filename).hdf5","r")
 data = read(file, "tx")
 Q = read(attrs(file)["Q"])
-beta = read(attrs(file)["beta"])
+T = read(attrs(file)["T"])
 potentialname = read(attrs(file)["potential"])
 
 if potentialname == "HO"
@@ -25,9 +26,11 @@ elseif potentialname == "MH"
 end
 
 
-
+beta = 1./T
 ps = compute(data, Q, beta, potential)
+ps2 = compute(data, Q, beta, potential, -1.)
 plot(ps[:,2],ps[:,4], ".")
+plot(ps2[:,2],ps2[:,4], ".")
 plt[:xlabel](L"q", fontsize = 18)
 plt[:ylabel](L"\zeta", fontsize = 18)
 

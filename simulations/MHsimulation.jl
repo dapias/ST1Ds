@@ -8,7 +8,8 @@ function simulation(T::Float64,Q::Float64, nsteps::Int64,deltatsampling::Float64
 
     #Burn-in period
     r = zeros(12)
-    r[1:3] = initcond(beta, Q) #Initial condition taken from the assumed equilibrium distribution
+    init = initcond(beta,Q)
+    r[1:3] = copy(init)
     r[4] = r[8] = r[12] = 1.0  #Entries of the identity matrix in the initial condition
     burn_intime = 20.0
  
@@ -18,7 +19,7 @@ function simulation(T::Float64,Q::Float64, nsteps::Int64,deltatsampling::Float64
     ##Simulation to calculate Lyapunov Exponents
     norm1, norm2, norm3, exp1, exp2, exp3 = lyapunovspectra(variationalDDfield,r,deltat, deltatsampling,nsteps, potential, beta, Q)
 
-    return exp1,exp2,exp3
+    return init, exp1,exp2,exp3
 
 end
 

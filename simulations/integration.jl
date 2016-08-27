@@ -1,7 +1,7 @@
-include("./solver.jl")
+include("../src/solver.jl")
 
 using HDF5
-
+using YAML
 
 println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (Quartic)) ")
 input = string(readline(STDIN))
@@ -24,13 +24,14 @@ elseif potentialname == "MH"
 end
     
 
+parameters = YAML.load(open("parametersintegration.yaml"))
+T = parameters["T"]
+Q = parameters["Q"]
+nsteps = parameters["nsteps"]
+dt = parameters["dt"]
 
-T = 10.0
 beta = 1./T;
-Q = 2.0; #"mass" ot the thermostat;
 r0 = initcond(beta, Q)
-dt = 0.05
-nsteps = 100000
 tfinal= nsteps*dt
 
 (t, xsol) = flowode45(DDfield, r0,dt, tfinal, potential, beta, Q)
@@ -41,12 +42,20 @@ z = map(v -> v[3], xsol);
 
 tx = [t x y z]
 
+try
+    mkdir("../poincaredata/")
+end
+
+try
+    mkdir("../poincaredata/$potentialname/")
+end
+
 filename = randstring(4)
-file = h5open("$(filename)$(potentialname).hdf5", "w")
+file = h5open("../poincaredata/$potentialname/$(filename)$(potentialname).hdf5", "w")
 
 file["tx"] = tx
 attrs(file)["Q"] = Q
-attrs(file)["beta"] = beta
+attrs(file)["T"] = T
 attrs(file)["potential"] = "$potentialname"
 attrs(file)["dt"] = dt
 attrs(file)["nsteps"] = nsteps
@@ -54,7 +63,7 @@ attrs(file)["nsteps"] = nsteps
             
 close(file)
 
-println("File $(filename)$(potentialname).hdf5 succesfully generated")
+println("File $(filename)$(potentialname).hdf5 succesfully generated. See file in ../poincaredata/$(potentialname)")
 
 #To call the file
 # file = h5open("data.hdf5", "r")
