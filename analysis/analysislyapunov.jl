@@ -1,59 +1,52 @@
 using HDF5
+using PyPlot
+
+"""
+    Open files with the same parameters Q and T
+    file1 = h5open("../data/potential/filename.hdf5","r")
+    file2 = h5open("../data/potential/filename.hdf5","r")
+    ...
+    filen = h5open("../data/potential/filename.hdf5","r")
+"""
+
+#    Particular example
+file = h5open("../data/HO/UV9nHO.hdf5","r")
+file2 = h5open("../data/HO/8rleHO.hdf5","r")
+
+l1 = read(file, "lyapexpsinitcond")
+l2 = read(file2, "lyapexpsinitcond")
+
+l = vcat(l1,l2)
 
 
+fig = plt[:figure](figsize=(6,8))
+fig[:subplots_adjust](hspace=.5)
 
-function makelyaparrays(exps::Int64, potential::AbstractString)
 
-    ##Number of simulation files
-    cd("$(homedir())/lyapunov/data/$potential")
-    dir = filter(x -> endswith(x,".hdf5"), readdir())
-    sims = length(dir)
+ax = fig[:add_subplot](311)
+ax[:set_xlabel](L"$lyap_1$",fontsize="18")
+#ax[:set_ylabel](L"$p$",fontsize="18")
+ax[:hist](l[:,1])
 
-    initial = Matrix{Float64}(sims,3)
+ax = fig[:add_subplot](312)
+ax[:set_xlabel](L"$lyap_2$",fontsize="18")
+#ax[:set_ylabel](L"$S$", fontsize="18")
+ax[:hist](l[:,2])
 
-    ##Initialize arrays lyap1, ...
-    for i in 1:exps
-        m = Symbol("lyap$i")
-        @eval $m = @eval $(zeros(sims))
-    end
 
-    ##Extract data of each file
-    j = 1
-    for i in dir
-        filename = "$i"
-        file = h5open("$filename", "r");
-        sim = read(file);
-        for k in 1:exps
-            p = Symbol("lyap$k")
-            lyap = @eval $p
-            lyap[j]  = @eval ($(sim["exp$k"]))
-        end
-        initial[j,:] = sim["initialcond"]
-        j += 1
-        close(file)
-    end
-    return initial, lyap1, lyap2, lyap3, sims
-end
+ax = fig[:add_subplot](313)
+ax[:set_xlabel](L"$lyap_3$",fontsize="18")
+#ax[:set_ylabel](L"$S$",fontsize="18")
+ax[:hist](l[:,3])
 
-println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (Quartic)) ")
+println("Type a name for the figure ")
 input = string(readline(STDIN))
-potential = input[1:end-1]
+filename = input[1:end-1]
 
-potentiallist = ["HO", "MH", "Quartic"]
-
-while !(potential in potentiallist)
-  println("The potential you typed is not in our database. Try one of the following: \n HO, MH or Quartic or check the spelling")
-  input = string(readline(STDIN))
-  potential = input[1:end-1]
+try
+    mkdir("../plots")
 end
 
+plt[:savefig]("../plots/$filename.png")
 
-exponents = 3
-initial, lyap1, lyap2, lyap3, sims  = makelyaparrays(exponents, potential)
-lyapexps = [[lyap1] [lyap2] [lyap3] [initial]]
-
-cd("$(homedir())/lyapunov/analysis/")
-
-writedlm("lyapexps$potential.txt", lyapexps)
-
-##Open it via readdlm("lyapexps.txt")
+println("Figure succesfully generated. See file  ../plots/$filename.png")
