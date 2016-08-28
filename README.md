@@ -12,7 +12,7 @@ That file generates a HDF5 file that is saved in the folder *data/* with the lya
 corresponding to the number of simulations set. Then you can proceed to group in a single data structure the results of a whole
 group of simulations, to do that execute the file *analysis/lyapunovexponents.jl*. Finally you can group together the 
 results of different groups of simulations by running the file *analysis/analysislyapunov.jl*. This script also 
-generates three histograms corresponding to the distribution of frequencies of each exponent.
+generates and saves three histograms corresponding to the distribution of frequencies of each exponent.
 
 ### Simulation 2
 
