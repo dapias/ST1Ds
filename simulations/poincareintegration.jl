@@ -3,21 +3,21 @@ include("../src/solver.jl")
 using HDF5
 using YAML
 
-println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (Quartic)) ")
+println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (QP)) ")
 input = string(readline(STDIN))
 potentialname = input[1:end-1]
 
-potentiallist = ["HO", "MH", "Quartic"]
+potentiallist = ["HO", "MH", "QP"]
 
 while !(potentialname in potentiallist)
-  println("The potential you typed is not in our database. Try one of the following: \n HO, MH or Quartic or check the spelling")
+  println("The potential you typed is not in our database. Try one of the following: \n HO, MH or QP or check the spelling")
   input = string(readline(STDIN))
   potentialname = input[1:end-1]
 end
 
 if potentialname == "HO"
     potential(x) = x^2/2.
-elseif potentialname == "Quartic"
+elseif potentialname == "QP"
     potential(x) = x^4/4.
 elseif potentialname == "MH"
     potential(x) = -1/2.*x^2 + 1/4.*x^4

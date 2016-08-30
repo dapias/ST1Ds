@@ -1,11 +1,11 @@
-println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (Quartic)) ")
+println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (QP)) ")
 input = string(readline(STDIN))
 potential = input[1:end-1]
 
-potentiallist = ["HO", "MH", "Quartic"]
+potentiallist = ["HO", "MH", "QP"]
 
 while !(potential in potentiallist)
-  println("The potential you typed is not in our database. Try one of the following: \n HO, MH or Quartic or check the spelling")
+  println("The potential you typed is not in our database. Try one of the following: \n HO, MH or QP or check the spelling")
   input = string(readline(STDIN))
   potential = input[1:end-1]
 end

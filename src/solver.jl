@@ -12,7 +12,7 @@ function flowode45(field::Function, r0::Vector{Float64},dt::Float64, tfinal::Flo
         field(r, potential, beta, Q)
     end
 
-    (t, pos) = ode45(extendedfield, r0, t)
+    (t, pos) = ode45(extendedfield, r0, t, points=:specified)
 
 end
 

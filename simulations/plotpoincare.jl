@@ -19,7 +19,7 @@ potentialname = read(attrs(file)["potential"])
 
 if potentialname == "HO"
     potential(x) = x^2/2.
-elseif potentialname == "Quartic"
+elseif potentialname == "QP"
     potential(x) = x^4/4.
 elseif potentialname == "MH"
     potential(x) = -1/2.*x^2 + 1/4.*x^4

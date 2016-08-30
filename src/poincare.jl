@@ -7,13 +7,13 @@ zerotol = 1.e-12
 
 
 
-function compute(tx, Q, beta, potential)
+function compute(tx, Q, beta, potential, direction = 1.)
 
     function DDextended(time, r::Vector{Float64})
         DDfield(r, potential, beta, Q)
     end
 
-    direction = 1.
+#    direction = 1.
     xsol = tx[:,2:4]
     e_z = [0.,0.,1.]
     e_2 = [1.,0.,0.]
