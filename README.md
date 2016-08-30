@@ -19,7 +19,6 @@ generates and saves three histograms corresponding to the distribution of freque
 Run the file *simulations/poincareintegration.jl*. Set the desired parameters in the file *simulations/parametersintegration.yaml*. 
 That file generates a HDF5 file that is saved in the folder *poincaredata/* with the position data $(q,p,\zeta)$ corresponding to a 
 particular trajectory integrated by the Dormand-Prince method for the parameters set. Then you can proceed to execute the file 
-*simulations/plotpoincare.jl* which displays and saves the poincare section of the called file.
-
+*simulations/plotpoincare.jl* which displays and saves the poincare section of the called file. See the folder *notebooks/* for examples and analysis of individual trajectories.
 
 
