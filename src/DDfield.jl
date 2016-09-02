@@ -10,7 +10,7 @@ function DDfield(r::Vector{Float64}, potential::Function, beta::Float64, Q::Floa
 
     
     dq_dt = p
-    dp_dt = force(q) + (1-exp(z - Q))/(1+exp(z-Q))*p/beta
+    dp_dt = force(q) + (1-exp(z/Q))/(Q*(1+exp(z/Q)))*p/beta
     dz_dt = p^2. - 1.0/beta
 
     [dq_dt, dp_dt, dz_dt]
@@ -33,7 +33,7 @@ function jacobian(r_and_phi::Vector{Float64}, potential::Function, beta::Float64
     fprime = forcederivative(potential)
 
     
-    J = [0. 1. 0.; fprime(q)  (1-exp(z - Q))/(1+exp(z-Q))/beta p*(-2.0*exp(z-Q))/(1.0+exp(z-Q))^2./beta; 0. 2.0*p 0.]
+    J = [0. 1. 0.; fprime(q)  (1-exp(z/Q))/(Q*(1.+exp(z/Q)))/beta p*(-2.0*exp(z/Q))/(Q*(1.0+exp(z/Q)))^2./beta; 0. 2.0*p 0.]
 
 end
     
