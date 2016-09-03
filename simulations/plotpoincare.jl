@@ -23,6 +23,8 @@ elseif potentialname == "QP"
     potential(x) = x^4/4.
 elseif potentialname == "MH"
     potential(x) = -1/2.*x^2 + 1/4.*x^4
+elseif potentialname == "MP"
+    potential(x) =  (1.-exp(-0.5*x))^2.
 end
 
 

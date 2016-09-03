@@ -1,4 +1,4 @@
-nsimulations: 5
+nsimulations: 1
 T: 10.0
 Q: 2.0
 nsteps: 100000
