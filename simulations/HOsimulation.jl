@@ -2,7 +2,7 @@ include("../src/lyapunovspectra.jl")
 
 function simulation(T::Float64,Q::Float64, nsteps::Int64,deltatsampling::Float64, deltat::Float64)
     
-    potential(x) = x^2/2.
+    potential(x::Real) = x^2/2.
 
     beta = 1./T;
 

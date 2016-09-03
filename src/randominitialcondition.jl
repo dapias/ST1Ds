@@ -24,7 +24,7 @@ end
 function initcond(beta::Float64, Q::Float64)
     q, p = boxmuller(beta)
     s = logisticsampling(Q)
-    [q, p, s]
+    z = Vector{Float64}([q,p,s])
 end
 
 
