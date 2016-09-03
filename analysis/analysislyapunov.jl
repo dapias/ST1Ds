@@ -49,6 +49,4 @@ ax[:hist](l[:,3])
 
 plt[:savefig]("../plots/$filename.png")
 
-
-
 println("Figure succesfully generated. See file  ../plots/$filename.png")
