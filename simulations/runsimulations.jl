@@ -62,3 +62,8 @@ for i in 1:nsimulations
 end
 
 println("File $(filename)$(potential).hdf5 succesfully generated. See file in ../data/$(potential)")
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> c873e8d980dff6e487ed33631caacb6a1b89aa69
