@@ -58,8 +58,10 @@ end
 
 newfile =  h5open("../poincaredata/sectionsandtrajectories/$fileseriesname.hdf5", "w")
 
-newfile["section1"] = zs1
-newfile["section2"] = zs2
+newfile["zsection1"] = zs1
+newfile["zsection2"] = zs2
+newfile["psection1"] = ps1
+newfile["psection2"] = ps2
 newfile["trajectory"] = tx  
 
 close(newfile)
