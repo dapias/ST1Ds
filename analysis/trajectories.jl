@@ -1,7 +1,11 @@
 include("../src/poincare.jl")
 using HDF5
 
-fileseriesname = "wnvUMH"
+println("Type the fileseriesname:")
+input = string(readline(STDIN))
+fileseriesname = input[1:end-1]
+
+#fileseriesname = "wnvUMH"
 potentialfile = fileseriesname[end-1:end]
 nsimulations = 100
 
