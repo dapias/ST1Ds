@@ -43,7 +43,11 @@ attrs(file)["dtintegration"] = deltat
 attrs(file)["Q"] = Q
 attrs(file)["T"] = T
 
+close(file)
+
 for i in 1:nsimulations
+
+    file = h5open("../data/$potential/$(filename)$(potential).hdf5", "r+")
 
     init, exp1,exp2,exp3 = simulation(T,Q,nsteps,deltatsampling,deltat)
     
@@ -53,8 +57,10 @@ for i in 1:nsimulations
     file["simulation-$i/exp3"] = exp3
 
     println("Simulation$i done")
+
+    close(file)
 end
 
 println("File $(filename)$(potential).hdf5 succesfully generated. See file in ../data/$(potential)")
 
-close(file)
+
