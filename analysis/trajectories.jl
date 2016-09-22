@@ -1,9 +1,13 @@
 include("../src/poincare.jl")
 using HDF5
 
-fileseriesname = "wnvUMH"
+println("Type the fileseriesname:")
+input = string(readline(STDIN))
+fileseriesname = input[1:end-1]
+
+#fileseriesname = "wnvUMH"
 potentialfile = fileseriesname[end-1:end]
-nsimulations = 100
+nsimulations = 1000
 
 i = 1
 filename = fileseriesname*"$i"
@@ -58,8 +62,10 @@ end
 
 newfile =  h5open("../poincaredata/sectionsandtrajectories/$fileseriesname.hdf5", "w")
 
-newfile["section1"] = zs1
-newfile["section2"] = zs2
+newfile["zsection1"] = zs1
+newfile["zsection2"] = zs2
+newfile["psection1"] = ps1
+newfile["psection2"] = ps2
 newfile["trajectory"] = tx  
 
 close(newfile)
