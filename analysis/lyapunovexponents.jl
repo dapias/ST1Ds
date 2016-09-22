@@ -1,20 +1,19 @@
 using HDF5
 
-
-
-function makelyaparrays(exps::Int64, potential::AbstractString, filename::AbstractString)
+function makelyaparrays(potential::AbstractString, filename::AbstractString)
 
     ##Number of simulation files
     #cd("$(homedir())/lyapunov/data/$potential")
     #dir = filter(x -> endswith(x,".hdf5"), readdir())
 
-    file = h5open("../data/$potential/$filename.hdf5","r+")
+    #    file = h5open("../data/$potential/$filename","r+")
+    file = h5open("$filename","r+")
     sims = length(names(file))
 
     initial = Matrix{Float64}(sims,3)
 
     ##Initialize arrays lyap1, ...
-    for i in 1:exps
+    for i in 1:3
         m = Symbol("lyap$i")
         @eval $m = @eval $(zeros(sims))
     end
@@ -23,7 +22,7 @@ function makelyaparrays(exps::Int64, potential::AbstractString, filename::Abstra
     j = 1
     for i in 1:sims
        sim = read(file, "simulation-$i")
-        for k in 1:exps
+        for k in 1:3
             p = Symbol("lyap$k")
             lyap = @eval $p
             lyap[j]  = @eval ($(sim["exp$k"]))
@@ -42,21 +41,37 @@ function makelyaparrays(exps::Int64, potential::AbstractString, filename::Abstra
 
 end
 
-println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (QP)) ")
-input = string(readline(STDIN))
-potential = input[1:end-1]
 
-potentiallist = ["HO", "MH", "QP"]
 
-while !(potential in potentiallist)
-  println("The potential you typed is not in our database. Try one of the following: \n HO, MH or QP or check the spelling")
-  input = string(readline(STDIN))
-  potential = input[1:end-1]
-end
+#Method 1:
+# println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (QP)) ")
+# input = string(readline(STDIN))
+# potential = input[1:end-1]
 
-println("Type the name of the .hdf5 file (without the extension)")
-input = string(readline(STDIN))
-filename = input[1:end-1]
+# potentiallist = ["HO", "MH", "QP"]
 
-exponents = 3
-makelyaparrays(exponents, potential, filename)
+# while !(potential in potentiallist)
+#   println("The potential you typed is not in our database. Try one of the following: \n HO, MH or QP or check the spelling")
+#   input = string(readline(STDIN))
+#   potential = input[1:end-1]
+# end
+
+# println("Type the name of the .hdf5 file (without the extension)")
+# input = string(readline(STDIN))
+# filename = input[1:end-1]
+
+# exponents = 3
+# makelyaparrays(exponents, potential, filename)
+
+
+#Method 2:
+
+potential = "MH"
+
+cd("../data/$potential")
+
+for i in filter(x -> endswith(x,".hdf5"), readdir())
+        filename = "$i"
+        makelyaparrays("$potential", filename)
+        end
+
