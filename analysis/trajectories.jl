@@ -7,7 +7,7 @@ fileseriesname = input[1:end-1]
 
 #fileseriesname = "wnvUMH"
 potentialfile = fileseriesname[end-1:end]
-nsimulations = 100
+nsimulations = 1000
 
 i = 1
 filename = fileseriesname*"$i"

@@ -1,13 +1,6 @@
-<<<<<<< HEAD
 nsimulations: 1000
 T: 1.0
 Q: 0.1
 nsteps: 1000000
-=======
-nsimulations: 5
-T: 1.0
-Q: 0.1
-nsteps: 100000
->>>>>>> c873e8d980dff6e487ed33631caacb6a1b89aa69
 deltatsampling: 0.05
 deltat: 0.005
