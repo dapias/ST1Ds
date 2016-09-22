@@ -1,0 +1,26 @@
+        - include("../src/lyapunovspectra.jl")
+        - 
+        - function simulation(T::Float64,Q::Float64, nsteps::Int64,deltatsampling::Float64, deltat::Float64)
+        -     
+ 27134078     potential(x::Real) = x^2/2.
+        0 
+        0     beta = 1./T;
+        - 
+        -     #Burn-in period
+      704     r = zeros(12)
+        0     init = initcond(beta,Q)
+    10464     r[1:3] = copy(init)
+        0     r[4] = r[8] = r[12] = 1.0  #Entries of the identity matrix in the initial condition
+        0     burn_intime = 20.0
+        -  
+        0     r = flowRK(variationalDDfield, r, deltat,burn_intime, potential, beta, Q)  #New initial condition after a transient time
+      640     r[4:end] = [1.,0.,0.,0.,1.,0.,0.,0.,1.] #Entries of the identity matrix in the new initial condition;
+        - 
+        -     ##Simulation to calculate Lyapunov Exponents
+        0     norm1, norm2, norm3, exp1, exp2, exp3 = lyapunovspectra(variationalDDfield,r,deltat, deltatsampling,nsteps, potential, beta, Q)
+        - 
+      560     return init, exp1,exp2,exp3
+        - 
+        - end
+        - 
+        - 

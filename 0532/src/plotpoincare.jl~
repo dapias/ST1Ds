@@ -1,0 +1,15 @@
+include("poincare.jl")
+
+file = h5open("data.hdf5","r")
+data = read(file, "tx")
+Q = 2.0
+beta = 1/10.
+potential = x^2./2.
+
+ps = compute(data, Q, beta, potential)
+
+close(file)
+
+using PyPlot
+
+plot(ps[:,2],ps[:,4], ".")

@@ -1,0 +1,11 @@
+using HDF5
+
+filename = randstring()
+file = h5open("../data/HDF5/HO/$filename.hdf5", "w")
+
+include("HOsimulation.jl")
+
+file["exp1"] = exp1
+file["exp2"] = exp2
+file["exp3"] = exp3
+

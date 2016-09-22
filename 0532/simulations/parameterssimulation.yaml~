@@ -1,0 +1,6 @@
+nsimulations: 5
+T: 1.0
+Q: 0.1
+nsteps: 100000
+deltatsampling: 0.05
+deltat: 0.0125
