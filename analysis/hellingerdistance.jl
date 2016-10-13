@@ -86,7 +86,13 @@ for i in 1:n
     hell[i] = hellinger(hist_exp, hist_theor)
 end
 
+close(file)
+close(file2)
+
 hellinger_results = hcat(time, hell)
+try
+    mkdir("../hellinger/")
+end
 writedlm("./hell$filename",hellinger_results)
 
 
