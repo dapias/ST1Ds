@@ -1,19 +1,19 @@
 println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (QP)) ")
 input = string(readline(STDIN))
-potential = input[1:end-1]
+pot = input[1:end-1]
 
 potentiallist = ["HO", "MH", "QP"]
 
-while !(potential in potentiallist)
+while !(pot in potentiallist)
   println("The potential you typed is not in our database. Try one of the following: \n HO, MH or QP or check the spelling")
   input = string(readline(STDIN))
-  potential = input[1:end-1]
+  pot = input[1:end-1]
 end
 
 using HDF5
 using YAML
 
-include("./$(potential)simulation.jl")
+include("./simulation.jl")
 
 parameters = YAML.load(open("parameterssimulation.yaml"))
 
@@ -30,11 +30,11 @@ try
 end
 
 try
-    mkdir("../data/$potential/")
+    mkdir("../data/$pot/")
 end
 
 filename = randstring(4)
-file = h5open("../data/$potential/$(filename)$(potential).hdf5", "w")
+file = h5open("../data/$pot/$(filename)$(pot).hdf5", "w")
 
 
 attrs(file)["nsteps"] = nsteps
@@ -47,9 +47,9 @@ close(file)
 
 for i in 1:nsimulations
 
-    file = h5open("../data/$potential/$(filename)$(potential).hdf5", "r+")
+    file = h5open("../data/$pot/$(filename)$(pot).hdf5", "r+")
 
-    init, exp1,exp2,exp3 = simulation(T,Q,nsteps,deltatsampling,deltat)
+    init, exp1,exp2,exp3 = simulation(T,Q,nsteps,deltatsampling,deltat, pot)
     
     file["simulation-$i/initialcond"] = init
     file["simulation-$i/exp1"] = exp1
@@ -61,4 +61,4 @@ for i in 1:nsimulations
     close(file)
 end
 
-println("File $(filename)$(potential).hdf5 succesfully generated. See file in ../data/$(potential)")
+println("File $(filename)$(pot).hdf5 succesfully generated. See file in ../data/$(pot)")
