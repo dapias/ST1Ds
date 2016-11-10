@@ -59,7 +59,7 @@ function lyapunovspectra(field::Function, r::Vector{Float64}, dt::Float64, dtsam
 
 #    println("Exponentes de Lyapunov: $exp1, $exp2, $exp3")
 
-    return norm1, norm2, norm3, exp1, exp2, exp3
+    return exp1, exp2, exp3
 
 end
 

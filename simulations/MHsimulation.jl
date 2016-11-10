@@ -17,7 +17,7 @@ function simulation(T::Float64,Q::Float64, nsteps::Int64,deltatsampling::Float64
     r[4:end] = [1.,0.,0.,0.,1.,0.,0.,0.,1.] #Entries of the identity matrix in the new initial condition;
 
     ##Simulation to calculate Lyapunov Exponents
-    norm1, norm2, norm3, exp1, exp2, exp3 = lyapunovspectra(variationalDDfield,r,deltat, deltatsampling,nsteps, potential, beta, Q)
+    exp1, exp2, exp3 = lyapunovspectra(variationalDDfield,r,deltat, deltatsampling,nsteps, potential, beta, Q)
 
     return init, exp1,exp2,exp3
 
