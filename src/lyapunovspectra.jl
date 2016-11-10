@@ -5,7 +5,7 @@ include("./gramschmidt.jl")
 
 
 """
-Solver based on a 4th order Runge-Kutta integrator
+Solver based on the 4th order Runge-Kutta integrator
 """
 function flowRK(field::Function, r0::Vector{Float64},dt::Float64, tfinal::Float64, potential::Function, beta::Float64, Q::Float64)
 

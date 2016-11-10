@@ -1,3 +1,6 @@
+"""
+Given a 3x3 matrix  orthogonalize its columns with the Gram-Schmidt procedure
+"""
 function gramschmidt(u::Matrix{Float64})
      w = eye(3)
      w[:,1] = u[:,1];

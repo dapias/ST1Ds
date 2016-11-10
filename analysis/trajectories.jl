@@ -30,8 +30,8 @@ end
 println("comence bien")
 zs1 = computezetasection(tx, Q, beta, potential)
 zs2 = computezetasection(tx, Q, beta, potential, -1.)
-ps1 = compute(tx, Q, beta, potential)
-ps2 = compute(tx, Q, beta, potential, -1.)
+ps1 = computepsection(tx, Q, beta, potential)
+ps2 = computepsection(tx, Q, beta, potential, -1.)
 println("Section 1 done")
 
 for i in 2:nsimulations

@@ -27,8 +27,8 @@ end
 
 
 beta = 1./T
-ps = compute(data, Q, beta, potential)
-ps2 = compute(data, Q, beta, potential, -1.)
+ps = computepsection(data, Q, beta, potential)
+ps2 = computepsection(data, Q, beta, potential, -1.)
 plot(ps[:,2],ps[:,4], ".")
 plot(ps2[:,2],ps2[:,4], ".")
 plt[:xlabel](L"q", fontsize = 18)
