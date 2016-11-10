@@ -1,7 +1,3 @@
-include("./DDfield.jl")
-include("./RungeKutta.jl")
-include("./randominitialcondition.jl")
-
 using ODE
 
 """

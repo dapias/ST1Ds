@@ -1,4 +1,5 @@
 include("../src/solver.jl")
+include("./simulation.jl")
 
 using HDF5
 using YAML
@@ -15,13 +16,7 @@ while !(potentialname in potentiallist)
   potentialname = input[1:end-1]
 end
 
-if potentialname == "HO"
-    potential(x) = x^2/2.
-elseif potentialname == "QP"
-    potential(x) = x^4/4.
-elseif potentialname == "MH"
-    potential(x) = -1/2.*x^2 + 1/4.*x^4
-end
+pot = potential(potentialname)
 
 try
     mkdir("../poincaredata/")
@@ -47,7 +42,7 @@ filename *= potentialname
 filenamei = filename*"1"
 
 file = h5open("../poincaredata/$potentialname/$(filenamei).hdf5", "w")
-(t, xsol) = flowode45(DDfield, r0,dt, tfinal, potential, beta, Q)
+(t, xsol) = flowode45(DDfield, r0,dt, tfinal, pot, beta, Q)
 x = map(v -> v[1], xsol)
 y = map(v -> v[2], xsol)
 z = map(v -> v[3], xsol);
@@ -65,7 +60,7 @@ println("Simulation 1 done. File $(filenamei).hdf5 ")
 for i in 2:nsimulations
     filenamei = filename*"$i"
     file = h5open("../poincaredata/$potentialname/$(filenamei).hdf5", "w")
-    (t, xsol) = flowode45(DDfield, r0,dt, tfinal, potential, beta, Q)
+    (t, xsol) = flowode45(DDfield, r0,dt, tfinal, pot, beta, Q)
     x = map(v -> v[1], xsol)
     y = map(v -> v[2], xsol)
     z = map(v -> v[3], xsol)

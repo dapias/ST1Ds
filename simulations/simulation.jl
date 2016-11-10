@@ -1,6 +1,5 @@
 include("../src/lyapunovspectra.jl")
 
-
 function potential(name::String)
     if name == "HO"
         x -> x^2./2
