@@ -30,9 +30,10 @@ julia> Pkg.add("PackageName")
 
 ## Authors
 
-Diego Tapias (Facultad de Ciencias, UNAM) diego.tapias@nucleares.unam.mx
+Diego Tapias (Facultad de Ciencias, UNAM) [diego.tapias@nucleares.unam.mx
 
 David Sanders (Facultad de Ciencias, UNAM) dpsanders@ciencias.unam.mx
 
+*2016*
 
 
