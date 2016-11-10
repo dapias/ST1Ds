@@ -1,24 +1,38 @@
-Two types of simulation:
+# Numerical tests for ergodicity
 
-- Lyapunov spectrum for three potentials (Mexican Hat, Quartic oscillator and Harmonic oscillator) with different random 
-initial conditions (**simulation 1**).
+We provide the code that supports the numerical tests reported in the manuscript *Ergodicity of one--dimensional systems coupled to the logistic thermostat*.
 
-- PoincarÃ© section for a particular long trajectory corresponding to one potential (**simulation 2**).
+It is organized as follows:
 
-### Simulation 1
+The `src` folder contains the files where the equations of motion are defined for a general potential together with the needed functions to calculate the Lyapunov spectrum and the Poincaré sections.
 
-Run the file *simulations/runsimulations.jl*. Set the desired parameters in the file *simulations/parameterssimulation.yaml*. 
-That file generates a HDF5 file that is saved in the folder *data/* with the lyapunov exponents and the initial conditions 
-corresponding to the number of simulations set. Then you can proceed to group in a single data structure the results of a whole
-group of simulations, to do that execute the file *analysis/lyapunovexponents.jl*. Finally you can group together the 
-results of different groups of simulations by running the file *analysis/analysislyapunov.jl*. This script also 
-generates and saves three histograms corresponding to the distribution of frequencies of each exponent.
+The `simulation` folder contains the main files `runsimulations.jl` and `poincareintegration.jl`. The first one generates a data file (with extension *.hdf5*) which contains the Lyapunov spectra for a certain number of random initial conditions specified in the file `parameterssimulation.yaml` (where the rest of relevant conditions can be specified). The second file integrates an arbitrary initial condition for a very long time, specified in `parametersintegration.yaml` and generates a data file which stores the integrated trajectory. Both data files are generated in a new folder that automatically will be createdcalled `data`.
 
-### Simulation 2
+Finally, the folder `analysis` contains the files needed to generate the kind of data reported in the article that may be imported and directly plotted without further treatment.
 
-Run the file *simulations/poincareintegration.jl*. Set the desired parameters in the file *simulations/parametersintegration.yaml*. 
-That file generates a HDF5 file that is saved in the folder *poincaredata/* with the position data $(q,p,\zeta)$ corresponding to a 
-particular trajectory integrated by the Dormand-Prince method for the parameters set. Then you can proceed to execute the file 
-*simulations/plotpoincare.jl* which displays and saves the poincare section of the called file. See the folder *notebooks/* for examples and analysis of individual trajectories.
+## Requirements
+
+**General**
+- Julia. 
+**Packages**
+- PyCall
+- HDF5
+- YAML
+- ODE
+- Cubature
+- ForwardDiff
+
+To add a package type the following command in the Julia REPL:
+
+```
+julia> Pkg.add("PackageName")
+```
+
+## Authors
+
+Diego Tapias (Facultad de Ciencias, UNAM) diego.tapias@nucleares.unam.mx
+
+David Sanders (Facultad de Ciencias, UNAM) dpsanders@ciencias.unam.mx
+
 
 
