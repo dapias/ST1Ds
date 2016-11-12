@@ -188,7 +188,8 @@ function simulation(p::Parameters)
         r[4] = r[8] = r[12] = 1.0  #Entries of the identity matrix in the initial condition
         burn_intime = 20.0
         r = flow(variationalDDfield, r, p)[end][2]  #New initial condition after a transient time
-        r[4:end] = [1.,0.,0.,0.,1.,0.,0.,0.,1.] #Entries of the identity matrix in the new initial condition;
+        r[4:end] = [1.,0.,0.,0.,1.,0.,0.,0.,1.] #Entries of the identity matrix in the new initial condition
+        #After burn-in time
         exp1, exp2, exp3 = lyapunovspectra(variationalDDfield,r,p)
 
         return init, exp1,exp2,exp3
