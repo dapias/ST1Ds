@@ -1,64 +1,88 @@
-println("Type the type of the potential (Harmonic oscillator (HO), Mexican Hat (MH), Quartic (QP)) ")
-input = string(readline(STDIN))
-pot = input[1:end-1]
-
-potentiallist = ["HO", "MH", "QP"]
-
-while !(pot in potentiallist)
-  println("The potential you typed is not in our database. Try one of the following: \n HO, MH or QP or check the spelling")
-  input = string(readline(STDIN))
-  pot = input[1:end-1]
-end
-
 using HDF5
-using YAML
 
-include("./simulation.jl")
-
-parameters = YAML.load(open("parameterssimulation.yaml"))
-
-T = parameters["T"]
-Q = parameters["Q"]
-nsimulations = parameters["nsimulations"]
-nsteps = parameters["nsteps"]
-deltatsampling = parameters["deltatsampling"]
-deltat = parameters["deltat"]
-
+include("../src/DDfield.jl")
+include("newparameters.jl")
 
 try
-    mkdir("../data/")
+    mkdir("../lyapunovdata/")
 end
 
 try
-    mkdir("../data/$pot/")
+    mkdir("../lyapunovdata/$(potential.name)/")
 end
 
-filename = randstring(4)
-file = h5open("../data/$pot/$(filename)$(pot).hdf5", "w")
+
+try
+    mkdir("../trajectorydata/")
+end
+
+try
+    mkdir("../trajectorydata/$(potential.name)/")
+end
 
 
-attrs(file)["nsteps"] = nsteps
-attrs(file)["dtsampling"] = deltatsampling
-attrs(file)["dtintegration"] = deltat
-attrs(file)["Q"] = Q
-attrs(file)["T"] = T
+parameters = Parameters(results, T, Q, dtsampling, dt, nsimulations, nsteps, thermo, potential, integrator)
 
-close(file)
-
-for i in 1:nsimulations
-
-    file = h5open("../data/$pot/$(filename)$(pot).hdf5", "r+")
-
-    init, exp1,exp2,exp3 = simulation(T,Q,nsteps,deltatsampling,deltat, pot)
+function writeattributes(file, p::Parameters)
+    attrs(file)["Integrator"] = p.integrator.name
+    attrs(file)["Thermostat"] = p.thermo.name
+    attrs(file)["nsteps"] = p.nsteps
+    attrs(file)["dtsampling"] = p.dtsampling
+    attrs(file)["dtintegration"] = p.dt
+    attrs(file)["Q"] = p.Q
+    attrs(file)["T"] = p.T
+end
     
-    file["simulation-$i/initialcond"] = init
-    file["simulation-$i/exp1"] = exp1
-    file["simulation-$i/exp2"] = exp2
-    file["simulation-$i/exp3"] = exp3
+function run(p::Parameters)
+    if p.results == "lyapunov"
+        
+        filename = randstring(5)    
+        file = h5open("../$(p.results)data/$(potential.name)/$(filename).hdf5", "w")
+        writeattributes(file,p)
+        close(file)
+        
+        for i in 1:nsimulations
+            file = h5open("../$(p.results)data/$(potential.name)/$(filename).hdf5", "r+")
+            
+            init, exp1,exp2,exp3 = simulation(p)
+            file["simulation-$i/initialcond"] = init
+            file["simulation-$i/exp1"] = exp1
+            file["simulation-$i/exp2"] = exp2
+            file["simulation-$i/exp3"] = exp3
+            println("Simulation$i done")
+            close(file)
+        end
+        
+        println("File $(filename) succesfully generated. See file in ../$(p.results)data/$(potential.name)")
 
-    println("Simulation$i done")
+    elseif p.results == "trajectory"
 
-    close(file)
+        filename = randstring(5)
+        filenamei = filename*"1"
+        file = h5open("../$(p.results)data/$(potential.name)/$(filenamei).hdf5", "w")
+        writeattributes(file,p)
+        tx = simulation(p)
+        file["tx"] = tx
+        r0 = tx[end,:][2:end]
+        close(file)
+        println("Simulation 1 done. File $(filenamei).hdf5 ")
+
+        for i in 2:nsimulations
+            filenamei = filename*"$i"
+            file = h5open("../$(p.results)data/$(potential.name)/$(filenamei).hdf5", "w")
+            (t, xsol) = flow(DDfield, r0,p)
+            x = map(v -> v[1], xsol)
+            y = map(v -> v[2], xsol)
+            z = map(v -> v[3], xsol)
+            tx = [t x y z]
+            file["tx"] = tx
+            r0 = tx[end,:][2:end]
+            close(file)
+            println("Simulation $i done. File $(filenamei).hdf5 ")
+        end
+        println("Sequence $(filename)-i.hdf5 succesfully generated. See files in ../$(p.results)data/$(potential.name)")
+    end
+    
 end
 
-println("File $(filename)$(pot).hdf5 succesfully generated. See file in ../data/$(pot)")
+run(parameters)
