@@ -31,6 +31,7 @@ function writeattributes(file, p::Parameters)
     attrs(file)["dtintegration"] = p.dt
     attrs(file)["Q"] = p.Q
     attrs(file)["T"] = p.T
+    attrs(file)["nsimulations"] = p.nsimulations
 end
     
 function run(p::Parameters)
