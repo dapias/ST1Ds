@@ -1,3 +1,7 @@
+"""
+This file returns a plain data text that contains the hellinger distance calculated in n (20 by default) different intervals of a whole trajectory together with its error.
+"""
+
 using HDF5
 using StatsBase
 using Cubature

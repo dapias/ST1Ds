@@ -1,3 +1,7 @@
+"""
+This file generates an array saved as a plain text that contains the integrated trajectory together with each marginal theoretical distribution
+"""
+
 using HDF5
 
 ###Modify this part accordingly
@@ -16,7 +20,7 @@ Q = read(attrs(file2)["Q"])
 T = read(attrs(file2)["T"])
 beta = 1./T
 
-####Modify this part according to the used potential
+####Modify this part in accordance to the used potential
 if potentialname == "harmonic"
     potential(x) = x^2/2.
     rhoq =  sqrt(beta/(2.*pi))*exp(-beta*Float64[potential(i) for i in q])	    

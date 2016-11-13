@@ -1,5 +1,9 @@
-include("../src/poincare.jl")
+include("../src/computesections.jl")
 using HDF5
+
+"""
+This file analyzes the series of files obtained by integrated a certain initial condition that was saved in trajectorydata. It generates a .hdf5 file with the Poincare sections and the whole trajectory of the integrated solution. The data is grouped in different datasets of the same file.
+"""
 
 ##Modify this part accordingly
 fileseriesname = "oFTyc"

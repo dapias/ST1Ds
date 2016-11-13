@@ -1,4 +1,4 @@
-include("./DDfield.jl")
+include("./DDmethods.jl")
 
 using ODE
 using HDF5
@@ -8,7 +8,6 @@ const zerotol = 1.e-12
 
 """
         computesection(trajectory, Q, beta, potential, plane, direction)
-
     Compute the intersection of a given trajectory (time-position) with the plane `plane=0`, i.e. plane = "p","q" or "z". The sense of the intersection is given by the  direction (+1. or -1.).
     """
 

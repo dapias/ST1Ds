@@ -1,22 +1,16 @@
 using HDF5
 
-include("../src/DDfield.jl")
-include("newparameters.jl")
+include("../src/DDmethods.jl")
+include("parameters.jl")
 
 try
     mkdir("../lyapunovdata/")
-end
-
-try
     mkdir("../lyapunovdata/$(potential.name)/")
 end
 
 
 try
     mkdir("../trajectorydata/")
-end
-
-try
     mkdir("../trajectorydata/$(potential.name)/")
 end
 
@@ -33,7 +27,10 @@ function writeattributes(file, p::Parameters)
     attrs(file)["T"] = p.T
     attrs(file)["nsimulations"] = p.nsimulations
 end
-    
+
+"""
+Returns the results of the simulation in a set of hdf5 files depending on the type of the simulation. If the lyapunov spectra are asked the results are returned in one file where the lyapunov spectrum for each initial condition is saved. If the trajectory is asked a long trajectory will be saved in different files coincident with the number of simulations passed.
+"""
 function run(p::Parameters)
     if p.results == "lyapunov"
         
@@ -81,9 +78,11 @@ function run(p::Parameters)
             close(file)
             println("Simulation $i done. File $(filenamei).hdf5 ")
         end
+        
         println("Sequence $(filename)-i.hdf5 succesfully generated. See files in ../$(p.results)data/$(potential.name)")
     end
     
 end
 
+#Executing the main function
 run(parameters)
