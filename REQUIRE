@@ -1,0 +1,8 @@
+julia 0.5
+Cubature 0.3.2
+ODE 0.2.1
+PyCall 1.7.2
+ForwardDiff 0.2.5
+HDF5 0.7.0
+Distributions 0.11.0
+StatsBase 0.11.1
