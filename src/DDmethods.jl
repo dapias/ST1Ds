@@ -32,7 +32,7 @@ function DDfield(r::Vector{Float64}, potential::Potential, beta::Float64, thermo
     (q, p, z) = r
 
     f = x-> force(x, potential)
-    
+
     dq_dt = p
     dp_dt = f(q) + friction(z,thermo)*p/beta
     dz_dt = p^2. - 1.0/beta
@@ -49,13 +49,13 @@ Returns the jacobian of the DDfield evaluated at the point `r`
 function jacobian(r::Vector{Float64}, potential::Potential, beta::Float64, thermo::Thermostat)
 
     (q,p,z) = r
-    
+
     fprime = forcederivative(potential)
 
     distprime(x) = derivative(thermo.distribution,x)
     distprime2(x) = derivative(distprime,x)
-    
-    
+
+
     J = [0. 1. 0.; fprime(q)  friction(z, thermo)/beta p/beta*(distprime2(z)/thermo.distribution(z) - friction(z, thermo)^2.); 0. 2.0*p 0.]
 
 end
@@ -72,14 +72,14 @@ function variationalDDfield(r_and_phi::Vector{Float64}, potential::Potential, be
     DPhi = J*rmatrix'
 
     return append!(v, DPhi'[:])
-end    
+end
 
 """
     flow(vectorfield, r0, parameters)
 Integrates the equation of motion of a given vector field with the integrator passed through the parameters.
 """
 function flow(field::Function, r0::Vector{Float64}, p::Parameters)
-    method = p.integrator.f  
+    method = p.integrator.f
     if p.results == "lyapunov"
         t = 0.0:p.dt:p.dtsampling
     elseif  p.results == "trajectory"
@@ -115,21 +115,25 @@ function gramschmidt(u::Matrix{Float64})
     w[:,2] = u[:,2] - dot(u[:,2],v1)*v1;
     v2 = w[:,2]/norm(w[:,2]);
     w[:,3] = (u[:,3] - dot(u[:,3],v2)*v2 - dot(u[:,3],v1)*v1)
-    
+
     return w
 end
 
 """
 Return the lyapunovspectrum of the passed vector field computed under the conditions passed in the parameters
 """
-function lyapunovspectrum(field::Function, r::Vector{Float64}, p::Parameters)
+function lyapunovspectrum(field::Function, r::Vector{Float64}, p::Parameters, burninsteps = 100)
     n = 3 ##Dimension of the dynamical system considered
     w = eye(n)
     norms = zeros(p.nsteps,n)
 
+    for i in 1:burninsteps
+        r = flow(field, r, p)[2][end]
+    end
+
     for i in 1:p.nsteps
         r = flow(field, r, p)[2][end]
-        u = reshape(r[4:end],n,n)     
+        u = reshape(r[4:end],n,n)
         w = gramschmidt(u')
         for j in 1:n
             norms[i,j] = norm(w[:,j])
@@ -148,32 +152,33 @@ function lyapunovspectrum(field::Function, r::Vector{Float64}, p::Parameters)
 end
 
 """
-Return the results of the simulation. Basically, the results are of two types: either the lyapunov spectra for a certain number of random initial conditions or the points belonging to the trajectory defined by a random initial condition. 
+Return the results of the simulation. Basically, the results are of two types: either the lyapunov spectra for a certain number of random initial conditions or the points belonging to the trajectory defined by a random initial condition.
 """
 function simulation(p::Parameters)
     beta = 1./p.T
-    if p.results == "lyapunov"
+    function lyapunov()
         r = zeros(12)
         init = initcond(beta,p.Q)
         r[1:3] = copy(init)
         r[4] = r[8] = r[12] = 1.0  #Entries of the identity matrix in the initial condition
-        burn_intime = 20.0
-        r = flow(variationalDDfield, r, p)[end][2]  #New initial condition after a transient time
-        r[4:end] = [1.,0.,0.,0.,1.,0.,0.,0.,1.] #Entries of the identity matrix in the new initial condition
-        #After burn-in time
         exp1, exp2, exp3 = lyapunovspectrum(variationalDDfield,r,p)
-
         return init, exp1,exp2,exp3
+      end
 
-    elseif p.results == "trajectory"
+    function trajectory()
         r0 = initcond(beta, p.Q)
         (t, xsol) = flow(DDfield, r0, p)
         x = map(v -> v[1], xsol)
         y = map(v -> v[2], xsol)
         z = map(v -> v[3], xsol)
         tx = [t x y z]
-
         return tx
     end
-    
+
+    if p.results == "lyapunov"
+      lyapunov()
+    elseif p.results == "trajectory"
+      trajectory()
+    end
+
 end

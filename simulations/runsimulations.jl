@@ -32,16 +32,18 @@ end
 Returns the results of the simulation in a set of hdf5 files depending on the type of the simulation. If the lyapunov spectra are asked the results are returned in one file where the lyapunov spectrum for each initial condition is saved. If the trajectory is asked a long trajectory will be saved in different files coincident with the number of simulations passed.
 """
 function run(p::Parameters)
-    if p.results == "lyapunov"
-        
-        filename = randstring(5)    
-        file = h5open("../$(p.results)data/$(potential.name)/$(filename).hdf5", "w")
-        writeattributes(file,p)
-        close(file)
-        
+
+    filename = randstring(5)
+    file = h5open("../$(p.results)data/$(potential.name)/$(filename).hdf5", "w")
+    writeattributes(file,p)
+    close(file)
+    
+
+  function lyapunov()
+
         for i in 1:nsimulations
             file = h5open("../$(p.results)data/$(potential.name)/$(filename).hdf5", "r+")
-            
+
             init, exp1,exp2,exp3 = simulation(p)
             file["simulation-$i/initialcond"] = init
             file["simulation-$i/exp1"] = exp1
@@ -50,38 +52,39 @@ function run(p::Parameters)
             println("Simulation$i done")
             close(file)
         end
-        
-        println("File $(filename) succesfully generated. See file in ../$(p.results)data/$(potential.name)")
 
-    elseif p.results == "trajectory"
+        println("File $(filename).hdf5 succesfully generated. See file in ../$(p.results)data/$(potential.name)")
+      end
 
-        filename = randstring(5)
-        filenamei = filename*"1"
-        file = h5open("../$(p.results)data/$(potential.name)/$(filenamei).hdf5", "w")
-        writeattributes(file,p)
+    function trajectory()
         tx = simulation(p)
-        file["tx"] = tx
         r0 = tx[end,:][2:end]
-        close(file)
-        println("Simulation 1 done. File $(filenamei).hdf5 ")
+        println("Part 1 done. ")
 
         for i in 2:nsimulations
-            filenamei = filename*"$i"
-            file = h5open("../$(p.results)data/$(potential.name)/$(filenamei).hdf5", "w")
             (t, xsol) = flow(DDfield, r0,p)
-            x = map(v -> v[1], xsol)
-            y = map(v -> v[2], xsol)
-            z = map(v -> v[3], xsol)
-            tx = [t x y z]
-            file["tx"] = tx
-            r0 = tx[end,:][2:end]
-            close(file)
-            println("Simulation $i done. File $(filenamei).hdf5 ")
+            x = map(v -> v[1], xsol)[2:end]
+            y = map(v -> v[2], xsol)[2:end]
+            z = map(v -> v[3], xsol)[2:end]
+            t += (i-1)*p.nsteps*p.dt
+            traj = [t[2:end] x y z]
+            tx = vcat(tx, traj)
+            r0 = traj[end,:][2:end]
+            println("Part $i done.")
         end
-        
-        println("Sequence $(filename)-i.hdf5 succesfully generated. See files in ../$(p.results)data/$(potential.name)")
+
+         file = h5open("../$(p.results)data/$(potential.name)/$(filename).hdf5", "r+")
+        file["tx"] = tx
+        close(file)
+
+        println("Trajectory $(filename).hdf5 succesfully generated. See file in ../$(p.results)data/$(potential.name)")
     end
-    
+
+    if p.results == "lyapunov"
+      lyapunov()
+    elseif p.results == "trajectory"
+      trajectory()
+    end
 end
 
 #Executing the main function
