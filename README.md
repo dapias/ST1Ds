@@ -10,6 +10,24 @@ The `simulation` folder contains the main file `runsimulations.jl`. This one gen
 
 Finally, the folder `analysis` contains the files needed to generate the kind of results reported in the article that may be imported and directly plotted without further treatment. 
 
+## Requirements
+
+**General**
+- Julia.
+
+**Packages**
+- HDF5
+- PyCall
+- Cubature
+- ODE
+- ForwardDiff
+- Distributions
+- Statsbase
+
+To add a package type the following command in the Julia REPL
+```
+julia> Pkg.add("PackageName")
+```
 ## Authors
 
 Diego Tapias (Facultad de Ciencias, UNAM) diego.tapias@nucleares.unam.mx
