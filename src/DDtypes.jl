@@ -1,7 +1,3 @@
-module DDtypes
-
-export Thermostat, Potential, Integrator, Parameters
-
 type Thermostat{F<:Function}
     name::String
     Q::Float64
@@ -29,6 +25,4 @@ type Parameters
     thermo::Thermostat
     potential::Potential
     integrator::Integrator
-end
-
 end

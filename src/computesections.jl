@@ -1,8 +1,3 @@
-include("./DDmethods.jl")
-
-using ODE
-using HDF5
-
 const zerotol = 1.e-12
 
 
@@ -71,3 +66,5 @@ function computesection(tx::Matrix{Float64},  thermo::Thermostat, beta::Float64,
 
   ps = ps[2:end,1:end]
 end
+
+

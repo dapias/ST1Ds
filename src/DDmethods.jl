@@ -1,10 +1,6 @@
 include("./randominitialcondition.jl")
-include("./DDtypes.jl")
 
-using ForwardDiff
 import ForwardDiff.derivative
-using ODE
-using DDtypes
 
 
 function force(x::Float64, potential::Potential)
