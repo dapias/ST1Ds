@@ -1,4 +1,4 @@
-module ST1Ds
+module ThermostattedDynamics
 
 using ODE
 using HDF5
