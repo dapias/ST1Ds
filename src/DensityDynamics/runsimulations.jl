@@ -29,7 +29,7 @@ function runsimulation(p::Parameters)
         writeattributes(file,p)
         close(file)
         
-        for i in 1:nsimulations
+        for i in 1:p.nsimulations
             file = h5open("../data/lyap$(filename).hdf5", "r+")
 
             init, exp1,exp2,exp3 = simulation(p)
