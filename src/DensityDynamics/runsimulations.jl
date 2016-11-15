@@ -19,7 +19,7 @@ end
 function runsimulation(p::Parameters)
 
     try
-        mkdir("../../data")
+        mkdir("../data")
     end
     
     filename = randstring(5)
