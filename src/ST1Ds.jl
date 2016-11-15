@@ -9,11 +9,12 @@ using StatsBase
 
 import Distributions.Normal
 
-include("DDtypes.jl")
-include("runsimulations.jl")
-include("marginaldistributions.jl")
-include("hellingerintegral.jl")
-include("sections.jl")
+include("DensityDynamics/DDtypes.jl")
+include("DensityDynamics/DDmethods.jl")
+include("DensityDynamics/runsimulations.jl")
+include("analysis/marginaldistributions.jl")
+include("analysis/hellingerintegral.jl")
+include("analysis/sections.jl")
 
 export Thermostat, Potential, Integrator, Parameters, runsimulation, marginaldistributions, hellingerintegral, sections
 
