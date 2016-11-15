@@ -17,25 +17,22 @@ end
     Returns the results of the simulation in a set of hdf5 files depending on the type of the simulation. If the lyapunov spectra are asked the results are returned in one file where the lyapunov spectrum for each initial condition is saved. If the trajectory is asked a long trajectory will be saved in different files coincident with the number of simulations passed.
     """
 function runsimulation(p::Parameters)
-  
+
+    try
+        mkdir("../../data")
+    end
+    
     filename = randstring(5)
-    file = h5open("../$(p.results)data/$(p.potential.name)/$(filename).hdf5", "w")
+    file = h5open("../../data/$(filename).hdf5", "w")
     writeattributes(file,p)
     close(file)
     
 
     function lyapunov()
-        try
-            mkdir("../lyapunovdata/")
-        end
-
-        try
-            mkdir("../lyapunovdata/$(p.potential.name)/")
-        end
-
+   
 
         for i in 1:nsimulations
-            file = h5open("../$(p.results)data/$(p.potential.name)/$(filename).hdf5", "r+")
+            file = h5open("../../data/lyap$(filename).hdf5", "r+")
 
             init, exp1,exp2,exp3 = simulation(p)
             file["simulation-$i/initialcond"] = init
@@ -46,18 +43,10 @@ function runsimulation(p::Parameters)
             close(file)
         end
 
-        println("File $(filename).hdf5 succesfully generated. See file in ../$(p.results)data/$(p.potential.name)")
+        println("File lyap$(filename).hdf5 succesfully generated. See file in ../../data/")
     end
 
     function trajectory()
-
-        try
-            mkdir("../trajectorydata/")
-        end
-
-        try
-            mkdir("../trajectorydata/$(p.potential.name)/")
-        end
         
         tx = simulation(p)
         r0 = tx[end,:][2:end]
@@ -75,11 +64,11 @@ function runsimulation(p::Parameters)
             println("Part $i done.")
         end
 
-        file = h5open("../$(p.results)data/$(p.potential.name)/$(filename).hdf5", "r+")
+        file = h5open("../../data/traj$(filename).hdf5", "r+")
         file["tx"] = tx
         close(file)
 
-        println("Trajectory $(filename).hdf5 succesfully generated. See file in ../$(p.results)data/$(p.potential.name)")
+        println("Trajectory traj$(filename).hdf5 succesfully generated. See file in ../$(p.results)data/$(p.potential.name)")
     end
 
     if p.results == "lyapunov"
