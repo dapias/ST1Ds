@@ -80,8 +80,8 @@ end
     """
 
 function sections(filename::String, potential::Potential, thermo::Thermostat)
+    file = h5open("../data/$filename.hdf5", "r")
     filename = filename[end-4:end]
-    file = h5open("../data/$filename.hdf5")
     tx = read(file["tx"])
     T = read(attrs(file)["T"])
     nsimulations = read(attrs(file)["nsimulations"])
