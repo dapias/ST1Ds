@@ -7,7 +7,7 @@
     """
 
 function marginaldistributions(filename::String, potential::Potential, thermo::Thermostat, normalizationfactor::Float64)
-    file = h5open("../trajectorydata/$(potential.name)/$filename.hdf5","r")
+    file = h5open("../data/$filename.hdf5","r")
 
     data = read(file["tx"])
     q = data[:,2][1:10:end]
@@ -25,16 +25,10 @@ function marginaldistributions(filename::String, potential::Potential, thermo::T
     results = hcat(q1, p1)
     results = hcat(results,z1)
 
-    try
-        mkdir("../marginals/")
-    end
-    try
-        mkdir("../marginals/$(potential.name)")
-    end
 
-    writedlm("../marginals/$(potential.name)/hist$filename", results)
+    writedlm("../data/hist$filename", results)
 
-    println("File hist$filename succesfully generated. See file in ../marginals/$(potential.name)")
+    println("File hist$filename succesfully generated. See file in ../data/")
     
 end
 
