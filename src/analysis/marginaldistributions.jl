@@ -7,6 +7,7 @@
     """
 
 function marginaldistributions(filename::String, potential::Potential, thermo::Thermostat, normalizationfactor::Float64)
+    filename = filename[end-4:end]
     file = h5open("../data/$filename.hdf5","r")
 
     data = read(file["tx"])

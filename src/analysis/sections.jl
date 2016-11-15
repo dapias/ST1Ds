@@ -80,7 +80,8 @@ end
     """
 
 function sections(filename::String, potential::Potential, thermo::Thermostat)
-    file = h5open("../trajectorydata/$(potential.name)/$filename.hdf5")
+    filename = filename[end-4:end]
+    file = h5open("../data/$filename.hdf5")
     tx = read(file["tx"])
     T = read(attrs(file)["T"])
     nsimulations = read(attrs(file)["nsimulations"])
@@ -95,15 +96,8 @@ function sections(filename::String, potential::Potential, thermo::Thermostat)
     zs = vcat(zs1, zs2)
     ps = vcat(ps1, ps2)
 
-    try
-        mkdir("../poincaredata/")
-    end
-
-    try
-        mkdir("../poincaredata/$(potential.name)")
-    end
-    
-    newfile =  h5open("../poincaredata/$(potential.name)/$filename.hdf5", "w")
+      
+    newfile =  h5open("../data/$filename.hdf5", "w")
 
  
     newfile["zsection"] = zs
@@ -113,6 +107,6 @@ function sections(filename::String, potential::Potential, thermo::Thermostat)
 
     close(newfile)
 
-    println("File $filename.hdf5 succesfully generated. See file in ../poincaredata/$(potential.name)")
+    println("File $filename.hdf5 succesfully generated. See file in ../data/")
 
 end

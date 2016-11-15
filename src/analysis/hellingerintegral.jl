@@ -10,7 +10,7 @@
     """
 function hellingerintegral(filename::String, potential::Potential,
                            thermo::Thermostat, normalizationfactor::Float64, n = 10)
-
+    filename = filename[end-4:end]
     file = h5open("../data/$filename.hdf5","r")
     data = read(file["tx"])
     T = read(attrs(file)["T"])
@@ -60,5 +60,5 @@ function hellingerintegral(filename::String, potential::Potential,
 
     writedlm("../data/hellinger$filename",hellinger_results)
 
-     println("File integral$filename succesfully generated. See file in ../data/")
+     println("File hellinger$filename succesfully generated. See file in ../data/")
 end
