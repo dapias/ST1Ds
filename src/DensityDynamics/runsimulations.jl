@@ -5,6 +5,7 @@
 function writeattributes(file, p::Parameters)
     attrs(file)["Integrator"] = p.integrator.name
     attrs(file)["Thermostat"] = p.thermo.name
+    attrs(file)["Potential"] = p.potential.name
     attrs(file)["nsteps"] = p.nsteps
     attrs(file)["dtsampling"] = p.dtsampling
     attrs(file)["dtintegration"] = p.dt
