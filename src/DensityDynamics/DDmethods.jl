@@ -141,7 +141,7 @@ function lyapunovspectrum(field::Function, r::Vector{Float64}, p::Parameters, bu
     end
     exps = zeros(n)
     for k in 1:n
-        exps[k] = sum(log(norms[:,k]))/(nsteps*dtsampling)
+        exps[k] = sum(log(norms[:,k]))/(p.nsteps*p.dtsampling)
     end
 
     return exps
