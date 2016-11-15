@@ -11,7 +11,7 @@
 function hellingerintegral(filename::String, potential::Potential,
                            thermo::Thermostat, normalizationfactor::Float64, n = 10)
 
-    file = h5open("../trajectorydata/$(potential.name)/$filename.hdf5","r")
+    file = h5open("../data/$filename.hdf5","r")
     data = read(file["tx"])
     T = read(attrs(file)["T"])
     beta = 1./T
@@ -57,15 +57,8 @@ function hellingerintegral(filename::String, potential::Potential,
 
     results = hcat(time, hell)
     hellinger_results = hcat(results, error)
-    try
-        mkdir("../hellinger/")
-    end
 
-    try
-        mkdir("../hellinger/$(potential.name)")
-    end
+    writedlm("../data/hellinger$filename",hellinger_results)
 
-    writedlm("../hellinger/$(potential.name)/integral$filename",hellinger_results)
-
-     println("File integral$filename succesfully generated. See file in ../hellinger/$(potential.name)")
+     println("File integral$filename succesfully generated. See file in ../data/")
 end
