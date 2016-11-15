@@ -10,8 +10,9 @@
     """
 function hellingerintegral(filename::String, potential::Potential,
                            thermo::Thermostat, normalizationfactor::Float64, n = 10)
-    filename = filename[end-4:end]
+
     file = h5open("../data/$filename.hdf5","r")
+    filename = filename[end-4:end]
     data = read(file["tx"])
     T = read(attrs(file)["T"])
     beta = 1./T
