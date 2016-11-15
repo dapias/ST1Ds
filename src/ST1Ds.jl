@@ -13,10 +13,10 @@ include("DensityDynamics/DDtypes.jl")
 include("DensityDynamics/DDmethods.jl")
 include("DensityDynamics/runsimulations.jl")
 include("analysis/marginaldistributions.jl")
-include("analysis/hellingerintegral.jl")
+include("analysis/hellingerdistance.jl")
 include("analysis/sections.jl")
 
-export Thermostat, Potential, Integrator, Parameters, runsimulation, marginaldistributions, hellingerintegral, sections
+export Thermostat, Potential, Integrator, Parameters, runsimulation, marginaldistributions, hellingerdistance, sections
 
 end
 
