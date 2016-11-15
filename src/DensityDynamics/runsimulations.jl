@@ -23,14 +23,12 @@ function runsimulation(p::Parameters)
     end
     
     filename = randstring(5)
-    file = h5open("../../data/$(filename).hdf5", "w")
-    writeattributes(file,p)
-    close(file)
-    
 
     function lyapunov()
-   
-
+        file = h5open("../../data/lyap$(filename).hdf5", "w")
+        writeattributes(file,p)
+        close(file)
+        
         for i in 1:nsimulations
             file = h5open("../../data/lyap$(filename).hdf5", "r+")
 
@@ -64,8 +62,9 @@ function runsimulation(p::Parameters)
             println("Part $i done.")
         end
 
-        file = h5open("../../data/traj$(filename).hdf5", "r+")
+        file = h5open("../../data/traj$(filename).hdf5", "w")
         file["tx"] = tx
+        writeattributes(file,p)
         close(file)
 
         println("Trajectory traj$(filename).hdf5 succesfully generated. See file in ../$(p.results)data/$(p.potential.name)")
