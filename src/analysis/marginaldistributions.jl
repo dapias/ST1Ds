@@ -2,7 +2,7 @@
     This function generates an array saved as a plain text that contains the integrated trajectory together with each marginal theoretical distribution. The normalization factor associated with the distribution in `q` is passed as an argument. 
     Example:
     ```
-    julia> results = marginaldistributions(filename, Potential("quartic", x->x^4/4.), Thermostat("logistic", A, x -> exp(x/A)/(A*(1.+ exp(x/A)).^2)), normalizationfactor)
+    julia> results = marginaldistributions(filename, Potential("quartic", x->x^4/4.), Thermostat("logistic", Q, x -> exp(x/Q)/(Q*(1.+ exp(x/Q)).^2)), normalizationfactor)
     ```
     """
 
