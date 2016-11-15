@@ -97,7 +97,7 @@ function sections(filename::String, potential::Potential, thermo::Thermostat)
     ps = vcat(ps1, ps2)
 
       
-    newfile =  h5open("../data/$filename.hdf5", "w")
+    newfile =  h5open("../data/sections$filename.hdf5", "w")
 
  
     newfile["zsection"] = zs
@@ -107,6 +107,6 @@ function sections(filename::String, potential::Potential, thermo::Thermostat)
 
     close(newfile)
 
-    println("File $filename.hdf5 succesfully generated. See file in ../data/")
+    println("File sections$filename.hdf5 succesfully generated. See file in ../data/")
 
 end
