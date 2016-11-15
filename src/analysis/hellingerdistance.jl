@@ -1,11 +1,11 @@
 @pyimport statsmodels.api as sm
 
 """
-    This function returns a plain data text that contains the hellinger distance calculated in n different intervals of a trajectory together with its error. The normalization factor associated with the distribution in `q` is passed as an argument.
+    This function returns a plain data text that contains the hellinger distance calculated in n (10 by default) different intervals of a trajectory together with its error. The normalization factor associated with the distribution in `q` is passed as an argument.
     Example:
     ```
     julia> hellingerintegral(filename, Potential("quartic", x->x^4./4.),
-    Thermostat("logistic", Q, x -> exp(x/Q)/(Q*(1.+ exp(x/Q)).^2)), normalizationfactor)
+    Thermostat("logistic", Q, x -> exp(x/Q)/(Q*(1.+ exp(x/Q)).^2)), normalizationfactor, n)
     ```
     """
 function hellingerintegral(filename::String, potential::Potential,
