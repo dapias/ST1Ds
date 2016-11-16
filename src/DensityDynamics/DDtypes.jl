@@ -14,7 +14,6 @@ type Integrator{F<:Function}
 end
 
 type Parameters
-    results::String
     T::Float64
     Q::Float64
     dtsampling::Float64

@@ -1,8 +1,3 @@
-include("./randominitialcondition.jl")
-
-import ForwardDiff.derivative
-
-
 function force(x::Float64, potential::Potential)
     f(y) = -derivative(potential.f,y)
     f(x)
@@ -71,37 +66,6 @@ function variationalDDfield(r_and_phi::Vector{Float64}, potential::Potential, be
 end
 
 """
-    flow(vectorfield, r0, parameters)
-Integrates the equation of motion of a given vector field with the integrator passed through the parameters.
-"""
-function flow(field::Function, r0::Vector{Float64}, p::Parameters)
-    method = p.integrator.f
-    if p.results == "lyapunov"
-        t = 0.0:p.dt:p.dtsampling
-    elseif  p.results == "trajectory"
-        t = 0.0:p.dt:p.nsteps*p.dt
-    end
-
-    function extendedfield(time::Float64, r::Vector{Float64})
-        field(r, p.potential, 1/p.T, p.thermo)
-    end
-
-    try
-        t,pos = method(extendedfield, r0, t, points=:specified)
-    catch
-        t,pos = method(extendedfield, r0, t)
-    end
-
-    if p.results == "trajectory"
-        sample = round(Int,p.dtsampling/p.dt)
-        t, pos = t[1:sample:end], pos[1:sample:end]
-    end
-
-    return t,pos
-end
-
-
-"""
 Given a 3x3 matrix  orthogonalize its columns with the Gram-Schmidt procedure
 """
 function gramschmidt(u::Matrix{Float64})
@@ -115,66 +79,6 @@ function gramschmidt(u::Matrix{Float64})
     return w
 end
 
-"""
-Return the lyapunovspectrum of the passed vector field computed under the conditions passed in the parameters
-"""
-function lyapunovspectrum(field::Function, r::Vector{Float64}, p::Parameters, burninsteps = 100)
-    n = 3 ##Dimension of the dynamical system considered
-    w = eye(n)
-    norms = zeros(p.nsteps,n)
 
-    for i in 1:burninsteps
-        r = flow(field, r, p)[2][end]
-    end
 
-    for i in 1:p.nsteps
-        r = flow(field, r, p)[2][end]
-        u = reshape(r[4:end],n,n)
-        w = gramschmidt(u')
-        for j in 1:n
-            norms[i,j] = norm(w[:,j])
-        end
-        for j in 1:n
-            w[:,j] = w[:,j]/norm(w[:,j])
-        end
-        r[4:end] = copy(w'[:])
-    end
-    exps = zeros(n)
-    for k in 1:n
-        exps[k] = sum(log(norms[:,k]))/(p.nsteps*p.dtsampling)
-    end
 
-    return exps
-end
-
-"""
-Return the results of the simulation. Basically, the results are of two types: either the lyapunov spectra for a certain number of random initial conditions or the points belonging to the trajectory defined by a random initial condition.
-"""
-function simulation(p::Parameters)
-    beta = 1./p.T
-    function lyapunov()
-        r = zeros(12)
-        init = initcond(beta,p.Q)
-        r[1:3] = copy(init)
-        r[4] = r[8] = r[12] = 1.0  #Entries of the identity matrix in the initial condition
-        exp1, exp2, exp3 = lyapunovspectrum(variationalDDfield,r,p)
-        return init, exp1,exp2,exp3
-      end
-
-    function trajectory()
-        r0 = initcond(beta, p.Q)
-        (t, xsol) = flow(DDfield, r0, p)
-        x = map(v -> v[1], xsol)
-        y = map(v -> v[2], xsol)
-        z = map(v -> v[3], xsol)
-        tx = [t x y z]
-        return tx
-    end
-
-    if p.results == "lyapunov"
-      lyapunov()
-    elseif p.results == "trajectory"
-      trajectory()
-    end
-
-end
