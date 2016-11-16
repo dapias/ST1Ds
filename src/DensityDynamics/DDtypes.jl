@@ -1,6 +1,5 @@
 type Thermostat{F<:Function}
     name::String
-    Q::Float64
     distribution::F
 end
 
