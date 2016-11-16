@@ -4,6 +4,13 @@ We provide the code that supports the numerical tests reported in the manuscript
 
 Its use is illustrated in the notebook `Running simulations.ipynb` in the folder `Examples`.
 
+## Installation
+
+From within Julia do
+
+```
+julia> Pkg.clone("git://github.com/dapias/ThermostattedDynamics.jl.git")
+```
 
 ## Requirements
 
