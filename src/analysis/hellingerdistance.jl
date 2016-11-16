@@ -8,8 +8,11 @@
     """
 function hellingerdistance(filename::String, potential::Potential,
                            thermo::Thermostat, normalizationfactor::Float64, n = 10)
-
-    @pyimport statsmodels.api as sm
+    try
+        @pyimport statsmodels.api as sm
+    catch
+        error("statsmodels not installed. Try `pip install statsmodels`")
+    end
 
     file = h5open("../data/$filename.hdf5","r")
     filename = filename[end-4:end]
