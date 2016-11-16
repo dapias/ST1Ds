@@ -35,7 +35,7 @@ function hellingerdistance(filename::String, potential::Potential,
     for i in 1:n
         data1 = data[1:Int(len/n*i),:]
         time[i] = data1[:,1][end]
-        dens = sm.nonparametric[:KDEMultivariate](data = data1[:,2:4], var_type = "ccc")
+        dens = sm[:nonparametric][:KDEMultivariate](data = data1[:,2:4], var_type = "ccc")
 
         function kernel(x::Vector{Float64})
             dens[:pdf](x)[1]
