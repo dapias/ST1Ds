@@ -2,7 +2,9 @@
 
 We provide the code that supports the numerical tests reported in the manuscript [Ergodicity of one--dimensional systems coupled to the logistic thermostat]().
 
-Its use is illustrated in the notebook `Running simulations.ipynb` in the folder `Examples`.
+This is a Julia package for performing simulations in the canonical ensemble for one--dimensional systems within the formalism of Density Dynamics. 
+
+Its use is illustrated in the notebook `Running simulations.ipynb` provided in the folder `Examples`.
 
 ## Installation
 
