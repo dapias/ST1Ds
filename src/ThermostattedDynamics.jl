@@ -12,7 +12,8 @@ using StatsBase
 import Distributions.Normal
 import ForwardDiff.derivative
 
-export Thermostat, Potential, Integrator, Parameters, lyapunov_exponents, trajectory, marginaldistributions, hellingerdistance, sections
+export Thermostat, Potential, Integrator, Parameters, lyapunov_exponents, trajectory, marginaldistributions, hellingerdistance, sections,
+save_lyapunov, save_trajectory
 
 const sm = PyNULL()
 

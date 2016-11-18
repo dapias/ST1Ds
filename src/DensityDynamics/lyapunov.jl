@@ -62,7 +62,7 @@ function lyapunov_simulation(p::Parameters)
     init = initcond(beta,p.Q)
     r[1:3] = copy(init)
     r[4] = r[8] = r[12] = 1.0  #Entries of the identity matrix in the initial condition
-    exp1, exp2, exp3 = lyapunov_spectrum(variationalDDfield,r,p)
-    return init, exp1,exp2,exp3
+    exps = lyapunov_spectrum(variationalDDfield,r,p)
+    return vcat(exps, init)
 end
 
