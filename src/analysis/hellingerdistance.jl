@@ -1,27 +1,20 @@
 """
-    This function returns a plain data text that contains the hellinger distance calculated in n (10 by default) different intervals of a trajectory together with its error. The normalization factor associated with the distribution in `q` is passed as an argument.
+    This function returns the hellinger distance calculated in n (10 by default) different intervals of a trajectory together with its error. The normalization factor associated with the distribution in `q` is passed as an argument.
     Example:
     ```
     julia> hellingerdistance(filename, Potential("quartic", x->x^4./4.),
     Thermostat("logistic", Q, x -> exp(x/Q)/(Q*(1.+ exp(x/Q)).^2)), normalizationfactor, n)
     ```
     """
-function hellingerdistance(filename::String, potential::Potential,
-                           thermo::Thermostat, normalizationfactor::Float64, n = 10)
+function hellingerdistance(data::Matrix{Float64}, parameters::Parameters, normalizationfactor::Float64, n = 10)
    
-    #@pyimport statsmodels.api as sm
-   
-    file = h5open("../data/$filename.hdf5","r")
-    filename = filename[end-4:end]
-    data = read(file["tx"])
-    T = read(attrs(file)["T"])
-    beta = 1./T
+    beta = 1./parameters.T
 
     function jointdistribution(x::Vector{Float64})
         q,p,z = x
-        rhoq = 1./normalizationfactor*exp(-beta*potential.f(q))
+        rhoq = 1./normalizationfactor*exp(-beta*parameters.potential.f(q))
         rhop = sqrt(beta/(2.*pi))*exp(-beta*p.^2/2.)
-        rhoz = thermo.distribution(z)
+        rhoz = parameters.thermo.distribution(z)
 
         rhoq*rhop*rhoz
     end
@@ -53,13 +46,8 @@ function hellingerdistance(filename::String, potential::Potential,
         println(i)
     end
 
-    close(file)
-   
+ 
 
     results = hcat(time, hell)
     hellinger_results = hcat(results, error)
-
-    writedlm("../data/hellinger$filename",hellinger_results)
-
-     println("File hellinger$filename succesfully generated. See file in ../data/")
 end
