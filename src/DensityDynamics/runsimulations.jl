@@ -66,7 +66,7 @@ function save_lyapunov(filename::String, data::Matrix{Float64}, p::Parameters)
     file["data"] = data
     close(file)
 
-    println("The $filename.hdf5 was saved in the folder `../data/`")
+    println("The file $filename.hdf5 was saved in the folder `../data/`")
 end
 
 
@@ -85,7 +85,7 @@ function save_trajectory(filename::String, data::Matrix{Float64}, p::Parameters)
     file["data"] = data
     close(file)
 
-    println("The $filename.hdf5 was saved in the folder `../data/`")
+    println("The file $filename.hdf5 was saved in the folder `../data/`")
 
 end
 
