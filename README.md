@@ -18,6 +18,7 @@ julia> Pkg.clone("git://github.com/dapias/ThermostattedDynamics.jl.git")
 
 - [Julia](http://julialang.org/downloads/)
 - [Python](https://www.python.org/downloads/release/python-2710/)
+- [HDF5](https://support.hdfgroup.org/downloads/index.html)
 
 
 ## Authors
