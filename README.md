@@ -18,12 +18,17 @@ julia> Pkg.clone("git://github.com/dapias/ThermostattedDynamics.jl.git")
 
 - [Julia](http://julialang.org/downloads/)
 
+## Usage
+
+There is a jupyter notebook in the folder `Examples` called `Running Simulations.ipynb` where the usage of the main functions is illustrated.
 
 ## Authors
 
-Diego Tapias (Facultad de Ciencias, UNAM) diego.tapias@nucleares.unam.mx
+If you find some problems with the package, do not hesitate to contact us
 
-David Sanders (Facultad de Ciencias, UNAM) dpsanders@ciencias.unam.mx
+- Diego Tapias (Facultad de Ciencias, UNAM) diego.tapias@nucleares.unam.mx
+
+- David Sanders (Facultad de Ciencias, UNAM) dpsanders@ciencias.unam.mx
 
 *2016*
 
