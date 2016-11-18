@@ -2,8 +2,7 @@
     This function returns the hellinger distance calculated in n (10 by default) different intervals of a trajectory together with its error. The normalization factor associated with the distribution in `q` is passed as an argument.
     Example:
     ```
-    julia> hellingerdistance(filename, Potential("quartic", x->x^4./4.),
-    Thermostat("logistic", Q, x -> exp(x/Q)/(Q*(1.+ exp(x/Q)).^2)), normalizationfactor, n)
+    julia> hellingerdistance(data, parameters, normalizationfactor, n)
     ```
     """
 function hellingerdistance(data::Matrix{Float64}, parameters::Parameters, normalizationfactor::Float64, n = 10)
