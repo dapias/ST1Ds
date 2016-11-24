@@ -10,6 +10,7 @@ using ForwardDiff
 using StatsBase
 
 import Distributions.Normal
+import Distributions.Logistic
 import ForwardDiff.derivative
 
 export Thermostat, Potential, Integrator, Parameters, lyapunov_exponents, trajectory, marginaldistributions, hellingerdistance, sections,

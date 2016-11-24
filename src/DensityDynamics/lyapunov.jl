@@ -59,7 +59,7 @@ Return the results of the simulation. Basically, the results are of two types: e
 function lyapunov_simulation(p::Parameters)
     beta = 1./p.T
     r = zeros(12)
-    init = initcond(beta,p.Q)
+    init = initialcondition(beta,p.Q)
     r[1:3] = copy(init)
     r[4] = r[8] = r[12] = 1.0  #Entries of the identity matrix in the initial condition
     exps = lyapunov_spectrum(variationalDDfield,r,p)
