@@ -16,19 +16,9 @@ function section(tx::Matrix{Float64},  p::Parameters, plane::String)
     end
     xsol = tx[:,2:4]  #Spatial part of the trajectory
 
-    if plane == "p"
-        e_z = [0.,0.,1.]
-        e_q = [1.,0.,0.]
-        nhat = cross(e_z, e_q)
-    elseif plane == "z"
-        e_p = [0.,1.,0.]
-        e_q = [1.,0.,0.]
-        nhat = cross(e_p, e_q)
-    elseif plane == "q"
-        e_z = [0.,0.,1.]
-        e_p = [0.,1.,0.]
-        nhat = cross(e_z,e_p)
-    end
+    planes = Dict("p"=>[0.,1.,0.], "z"=>[0.,0.,1.],"q"=>[1.,0.,0.])
+
+    nhat = planes[plane]  #Unit vector normal to the chosen plane
 
     sections = zeros(4)'
     
