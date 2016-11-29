@@ -41,7 +41,11 @@ function section(tx::Matrix{Float64},  p::Parameters, plane::String)
                 
                 while abs(psectcond) > zerotol
                     tint = [0.0; deltat]
-                (tint, xint) = ode45(DDextended,xcandidate, tint, points = :specified)
+                    try
+                        (tint, xint) = p.integrator.f(DDextended,xcandidate, tint, points = :specified)
+                    catch
+                        (tint, xint) = p.integrator.f(DDextended,xcandidate, tint)
+                    end
                     xcandidate = xint[2,:][]
                     psectcond = projection(xcandidate)
                     tpsect += deltat
