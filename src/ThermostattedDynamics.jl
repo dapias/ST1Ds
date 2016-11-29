@@ -13,10 +13,11 @@ import Distributions.Normal
 import Distributions.Logistic
 import ForwardDiff.derivative
 
-export Thermostat, Potential, Integrator, Parameters, lyapunov_exponents, trajectory, marginaldistributions, hellingerdistance, sections,
-save_lyapunov, save_trajectory, section
+export Thermostat, Potential, Integrator, Parameters, lyapunov_exponents, trajectory, marginaldistributions, hellingerdistance, sections, save_lyapunov, save_trajectory, section, geometrictrajectory
 
 const sm = PyNULL()
+
+
 
 function __init__()
     copy!(sm, pyimport_conda("statsmodels.api", "statsmodels"))
@@ -27,6 +28,7 @@ include("DensityDynamics/DDtypes.jl")
 include("DensityDynamics/DDmethods.jl")
 include("DensityDynamics/lyapunov.jl")
 include("DensityDynamics/trajectory.jl")
+include("DensityDynamics/integrador.jl")
 include("DensityDynamics/runsimulations.jl")
 include("analysis/marginaldistributions.jl")
 include("analysis/hellingerdistance.jl")

@@ -14,13 +14,13 @@ function section(tx::Matrix{Float64},  p::Parameters, plane::String)
     function DDextended(time, r::Vector{Float64})
         DDfield(r, p.potential, beta, p.thermo)
     end
-    xsol = tx[:,2:4]  #Spatial part of the trajectory
+    xsol = tx[:,2:end]  #Spatial part of the trajectory
 
-    planes = Dict("p"=>[0.,1.,0.], "z"=>[0.,0.,1.],"q"=>[1.,0.,0.])
+    planes = Dict("p"=>[0.,1.,0.,0.], "z"=>[0.,0.,1.,0.],"q"=>[1.,0.,0.,0.])
 
     nhat = planes[plane]  #Unit vector normal to the chosen plane
 
-    sections = zeros(4)'
+    sections = zeros(5)'
     
     for direction in [1.0,-1.0]
         
@@ -30,7 +30,7 @@ function section(tx::Matrix{Float64},  p::Parameters, plane::String)
         end
         
         projarray = [projection(xsol[i,:]) for i in 1:length(xsol[:,1])]
-        ps = zeros(4)'
+        ps = zeros(5)'
         
         for i in 1:(length(projarray)-1)
             if  projarray[i] < 0. && projarray[i+1] > 0. #Condition of intersection
@@ -41,7 +41,7 @@ function section(tx::Matrix{Float64},  p::Parameters, plane::String)
                 
                 while abs(psectcond) > zerotol
                     tint = [0.0; deltat]
-                (tint, xint) = ode45(DDextended,xcandidate, tint, points = :specified)
+                    (tint, xint) = ode45(DDextended,xcandidate, tint, points = :specified)
                     xcandidate = xint[2,:][]
                     psectcond = projection(xcandidate)
                     tpsect += deltat
