@@ -13,7 +13,7 @@ import Distributions.Normal
 import Distributions.Logistic
 import ForwardDiff.derivative
 
-export Thermostat, Potential, Integrator, Parameters, lyapunov_exponents, trajectory, marginaldistributions, hellingerdistance, sections, save_lyapunov, save_trajectory, section, geometrictrajectory
+export Thermostat, Potential, Integrator, Parameters, lyapunov_exponents, trajectory, marginaldistributions, hellingerdistance, sections, save_lyapunov, save_trajectory, section, geometrictrajectory, geometricsection
 
 const sm = PyNULL()
 

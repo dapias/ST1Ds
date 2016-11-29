@@ -19,6 +19,27 @@ function verletstep(r::Vector{Float64}, par::Parameters)
     return [q,p,z,v]
 end
 
+function thermostatstep(r::Vector{Float64}, par::Parameters, dt::Float64)
+    q,p,z,v = r
+    beta = 1./par.T
+    psquare = p^2.
+    z += dt/4.*(psquare - 1/beta)
+    v -= dt/2.*(friction(z, par.thermo)/beta)
+    p = p*exp(dt/2.*(friction(z,par.thermo)/beta))
+    z += dt/4.*(exp(dt*friction(z,par.thermo)/beta)*psquare - 1./beta)
+
+    return [q,p,z,v]
+end
+
+function verletstep(r::Vector{Float64}, par::Parameters, dt::Float64)
+    q,p,z,v = r
+    p += 0.5*dt*force(q,par.potential)
+    q += dt*p
+    p += 0.5*dt*force(q,par.potential)
+
+    return [q,p,z,v]
+end
+
 
 function geometricintegration(r0::Vector{Float64}, p::Parameters)
     t = 0.0:p.dt:p.nsteps*p.dt
@@ -47,6 +68,18 @@ function geometricintegration(r0::Vector{Float64}, p::Parameters)
     return tx
     
 end
+
+function geometricintegration(r0::Vector{Float64}, p::Parameters, dt::Float64)
+
+ 
+    ra = thermostatstep(r0,p, dt)
+    rb = verletstep(ra,p, dt)
+    r = thermostatstep(rb,p, dt)
+
+    return (r0,r)
+    
+end
+
 
 
 
