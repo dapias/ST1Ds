@@ -34,7 +34,8 @@ function trajectory_simulation(p::Parameters, r0::Vector{Float64})
     x = map(v -> v[1], xsol)
     y = map(v -> v[2], xsol)
     z = map(v -> v[3], xsol)
-    tx = [t x y z]
+    v = map(v -> v[4], xsol)
+    tx = [t x y z v]
     return tx
 end
 

@@ -34,6 +34,7 @@ function trajectory(p::Parameters)
 
     beta = 1./p.T
     r0 = initialcondition(beta, p.Q)
+    r0 = push!(r0, 0.0)
     tx = trajectory_simulation(p, r0)
     r0 = tx[end,:][2:end]
     println("Part 1 done. ")

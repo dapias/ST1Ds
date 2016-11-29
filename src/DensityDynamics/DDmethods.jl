@@ -16,19 +16,21 @@ end
 
 
 """
-Equations of motion fot a general potential coupled to any thermostat
+Equations of motion for a general potential coupled to any thermostat
 """
 function DDfield(r::Vector{Float64}, potential::Potential, beta::Float64, thermo::Thermostat)
 
-    (q, p, z) = r
+    (q, p, z, v) = r
 
     f = x-> force(x, potential)
 
     dq_dt = p
     dp_dt = f(q) + friction(z,thermo)*p/beta
     dz_dt = p^2. - 1.0/beta
+    dv_dt = -friction(z,thermo)/beta
 
-    [dq_dt, dp_dt, dz_dt]
+    
+    [dq_dt, dp_dt, dz_dt, dv_dt]
 
 end
 
