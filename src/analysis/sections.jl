@@ -41,6 +41,7 @@ function section(tx::Matrix{Float64},  p::Parameters, plane::String)
                 
                 while abs(psectcond) > zerotol
                     tint = [0.0; deltat]
+                    xint = [zeros(3), zeros(3)] #Initializing array
                     try
                         (tint, xint) = p.integrator.f(DDextended,xcandidate, tint, points = :specified)
                     catch
